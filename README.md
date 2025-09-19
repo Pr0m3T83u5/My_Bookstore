@@ -4,7 +4,7 @@
 
 
 <!-- Heading -->
-# 📝 My BookStore Website
+# ☁️ Weather Deatils
 
 Welcome to my second Website. This Website is bootstraped and is used to practice API calls and connections using AXIOS
 ### Built With
@@ -94,6 +94,7 @@ Welcome to my second Website. This Website is bootstraped and is used to practic
 
 * [Best-README-template](https://github.com/othneildrew/Best-README-Template?tab=readme-ov-file)
 * [App Brewary Complete-Web-Dev Course](https://www.appbrewery.com/p/the-complete-web-development-course)
-* [Penguin Random House API](https://www.penguinrandomhouse.biz/webservices/rest/)
+* [open-Meteo](https://open-meteo.com/en/docs)
+* [Geo-coding]([https://openweathermap.org/api/geocoding-api](https://open-meteo.com/en/docs/geocoding-api))
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
