@@ -1,15 +1,46 @@
 <%- include('partials/header') %>
 
-<!-- Function for cards-->
-<!----------------------->
+    <!-- Function for cards-->
+    <!----------------------->
 
-<main>
-<div id="" class="l">
-    <form action="/getCity" method="POST"> 
-        <input class="" type="text" id="cityName" name="cityName" placeholder="Enter city name..."> 
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-</div>
-</main>
+    <main>
+        <div id="location" class="">
+            <!-- Search form -->
+            <form action="/getCity" method="POST">
+                <input class="" type="text" id="cityName" name="cityName" placeholder="Enter city name...">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+        <div id="weather-overview-container">
+            <h2 id="cityCountryState">
+                Current weather in <br><%= cityCountryState.replaceAll("_", ", " ) %>
+            </h2>
+            <!-- Current Weather Section -->
+            <div id="latest-location-report" class="">
+                <h4>
+                    Weather as reported on: <%= currentWeather.time.split("T")[1]%> <%= currentWeather.time.split("T")[0]%>
+                </h4>
+                <h4>As per <a href="https://open-meteo.com/">Open-Meteo</a></h4>
+            </div>
+            <div id="current-weather" class="">
+                <p id="CurrentTemp">
+                    <%= currentWeather.temperature_2m %>°C
+                </p>
+                <p>Precipitation: <%= currentWeather.precipitation %> mm</p>
+                <div id="hourly-forecast-container" class="">
+                    <% for(let i=0; i<N; i++){ %>
+                        <div class="hourly-element">
+                            <div class="Hour hourly-element"><%= hour_temp_precip[i][0] %></div>
+                            <div class="temperature_2m hourly-element"><%= hour_temp_precip[i][1][0] %></div>
+                            <div class="precipitation hourly-element"><%= hour_temp_precip[i][1][1] %></div>
+                        </div>
+                    <% } %>
+                
+                </div>
+            </div>
 
-<%- include('partials/footer') %>
+
+        </div>
+    </main>
+
+    <%- include('partials/footer') %>
