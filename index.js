@@ -14,7 +14,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //Global Variables
 var cityLikeNames = [];
 
-//
+//Functions===================================================================
+/**
+ * Takes in the String of date-time in the format provided by the API and 
+ * returns the only the hour part from it
+ * 
+ * @param {string} time - Date-time value in the format given by the API(eg: 2025-09-09T23:45)
+ * @returns {string} The hour substring
+ */
 function timeFormatToHourConversion(time){
     //converts the API given time format to HH:MM, H-hour M-minute
     let longHour = time.split("T")[1];
@@ -23,38 +30,60 @@ function timeFormatToHourConversion(time){
     return hour;
 }
 
+/**
+ * Takes in the String-Array of date-time in the format provided by the API and 
+ * returns the only the hour part from each of the Strings 
+ * 
+ * @param {Array<string>} timeArray - Array of date-time Strings
+ * @returns {Array<string>} Array of hour substring from each entry 
+ */
 function array_timeFormatToHourConversion(timeArray){
+    //to store the hours from the timeArray
     let timeArrayFormatted = [];
+    //Iterates through the array and adds the hour substring to the above empty list
     for(let i=0; i<timeArray.length; i++){
         timeArrayFormatted.push(timeArray[i].split("T")[1]);
     }
     return timeArrayFormatted;
 }
 
+/**
+ * Returns the indices of the next N hours in the time array after the current time.
+ * 
+ * @param {Array<string>} timeArray - Array of date-time strings in API format
+ * @param {string} currentTime - Current date-time string in API format
+ * @param {number} N - Number of next hours to get indices for
+ * @returns {Array<number>} Array of indices for the next N hours
+ */
 function next_N_HoursIndices(timeArray, currentTime, N){
     var hourIndices =[]; //for storing the index values
+    var startIndex = 0; //Stores the index of the current time 
 
     let thisCurrentTime = timeFormatToHourConversion(currentTime);
-    let startIndex = 0; //Stores the index of the current time 
-
-    //Optimize by halving the interavals...Is it but really an optimisation?
     
     //Loops through each entry of the array
     for(let i=0; i<timeArray.length; i++){
         let newTime = timeFormatToHourConversion(timeArray[i]);
-        //finds the index of the current time
+        //finds the index of the current time and breaks out of the loop
         if(newTime > thisCurrentTime){
             startIndex = i;
-            break
+            break;
         }
     }
-    //Starts at the current time and add the next N entries to the array
+    //Starts at the current time and adds the next N entries to the array
     for(let i=0; i<N; i++){
         hourIndices.push(startIndex+i);
     }
     return hourIndices;
 }
 
+/**
+ * Returns the values at the specified indices from the given array.
+ * 
+ * @param {Array<any>} array - The source array to extract values from.
+ * @param {Array<number>} indexArray - Array of indices to extract values.
+ * @returns {Array<any>} Array of values at the specified indices.
+ */
 function valuesAtIndex(array, indexArray){
     let values = [];
     for(let i=0; i<indexArray.length; i++){
@@ -63,6 +92,14 @@ function valuesAtIndex(array, indexArray){
     return values;
 }
 
+/**
+ * Combines two arrays into an array of pairs, 
+ * where each pair contains corresponding elements from both arrays.
+ * 
+ * @param {Array<any>} arr1 - The first array.
+ * @param {Array<any>} arr2 - The second array.
+ * @returns {Array<Array<any>>} A 2 dimensional array with paired index values 
+ */
 function toArray(arr1, arr2){
     let mainArr = [];
     for(let i=0; i<arr1.length; i++){
@@ -71,6 +108,13 @@ function toArray(arr1, arr2){
     return mainArr;
 }
 
+/**
+ * Creates an object by mapping each key from the keysArray to the corresponding value in the valueArray.
+ * 
+ * @param {Array<string>} keysArray - Array of keys to use for the object.
+ * @param {Array<any>} valueArray - Array of values to assign to each key.
+ * @returns {Object} An object mapping keys to their corresponding values.
+ */
 function toObject(keysArray, valueArray){
     var dict = {};
     keysArray.forEach((key,index) => {
@@ -78,7 +122,9 @@ function toObject(keysArray, valueArray){
     })
     return dict;
 }
-//ROUTES==========================================================
+//============================================================================
+
+//ROUTES======================================================================
 //root route
 app.get('/', (req, res) => {
     res.redirect('/home');
@@ -119,22 +165,23 @@ app.get('/home', async (req, res) => {
             hour_temp_precip: hour_TempPrecip_Obj,
         });
     } catch (error) {
-        console.error('Error fetching data from Open-Meteo API:', error);
+        console.error('Error rendering home Page:', error);
         res.status(500).send('Internal Server Error');
         return;
     }
     
 });
-//================================================================
 
-//API ROUTES======================================================
+// POST to get city coordinates from the API
 app.post('/getCity', async (req, res) => {
-    let cityName = req.body.cityName;
+    let cityName = req.body.cityName; //city name from the form on the home page
     try{
         const response = await axios.get(`https://geocoding-api.open-meteo.com/v1/search?name=${cityName.toUpperCase()}&count=10&language=en&format=json`);
+        
+        //stores the first 10 Objects in the global variable
         cityLikeNames = response.data["results"];
-        // console.log(cityLikeNames[0]); // Log the first city object for verification
-        // console.log(cityLikeNames); // Log the entire array of city objects for verification 
+
+        //redirects to the home page with the information as query params
         res.redirect('/home?city='+cityLikeNames[0]["name"]+"_"+cityLikeNames[0]["admin1"]+"_"+cityLikeNames[0]["country"]+'&lat='+cityLikeNames[0]["latitude"]+'&lon='+cityLikeNames[0]["longitude"]);
     } catch (error) {
         console.error('Error fetching data from Open-Meteo API:', error);
@@ -142,7 +189,8 @@ app.post('/getCity', async (req, res) => {
         return;
     }
 });
-//================================================================
+//============================================================================
+
 
 //Listening Route
 app.listen(PORT, () => {
