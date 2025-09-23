@@ -11,46 +11,24 @@ Welcome to my second Website. This Website is bootstraped and is used to practic
 *  [Jquery](https://jquery.com/)
 *  [ExpressJS](https://expressjs.com/)
 *  [EJS](https://ejs.co/)
-##### To be added
-*  [PostgreSQL](https://www.postgresql.org/)
 *  [Axios HTTP](https://axios-http.com/docs/intro)
 
 ## Key Features
 - ⚙️ Runs on an Express.js server with EJS-based dynamic webpages
-##### To be added
-- 💻 Uses AXIOS HHTP for API connection 
-- 🕹️ Connected with PostgreSQL <!--(read further on how to create the database and join it with the server)-->
+- 🛰️ Uses AXIOS HTTP for API calls to Open-Meteo for city location and location weather
+- 🤖 Added CSS from Claude AI 
   
   <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- Setting up the project -->
-<!--
 ## Getting Started
 
 ### Prerequisites
-*  Have pgAdmin 4 (PostgreSQL) installed
+*  None
 
 ### Instructions to Start the Website
-1. **Create a Database**  
-   In pgAdmin, create a new database named **B1ogger** (note the number `1` instead of letter `l`) under the user `postgres`.
 
-2. **Create Tables**  
-   Run the following SQL queries:
-   ```sql
-   CREATE TABLE users (
-     id SERIAL PRIMARY KEY,
-     user_name VARCHAR(100) NOT NULL UNIQUE,
-     password VARCHAR(100) NOT NULL
-   );
-   CREATE TABLE blogs (
-     id SERIAL PRIMARY KEY,
-     blog_title VARCHAR(100) NOT NULL,
-     blog_content TEXT NOT NULL,
-     user_name VARCHAR(100) REFERENCES users(user_name)
-   );
-   ```
-   -->
 1. Clone the repo
    ```sh
    git clone https://github.com/Pr0m3T83u5/My_Blogger1_Website
@@ -81,20 +59,23 @@ Welcome to my second Website. This Website is bootstraped and is used to practic
 
    <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- Note -->
+<!-- Roadmap -->
 ## Roadmap
-- [ ] Database functionality
-- [ ] Add API functionality
+- [x] Add API functionality
+- [x] CSS
 - [ ] Security Features
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!--
+## CSS before and after <a id="ClaudeCSS"></a>
+-->
+
+
 <!-- Acknowledgements -->
 ## Acknowledgments
-
-* [Best-README-template](https://github.com/othneildrew/Best-README-Template?tab=readme-ov-file)
 * [App Brewary Complete-Web-Dev Course](https://www.appbrewery.com/p/the-complete-web-development-course)
-* [open-Meteo](https://open-meteo.com/en/docs)
+* [Open-Meteo](https://open-meteo.com/en/docs)
 * [Geo-coding]([https://openweathermap.org/api/geocoding-api](https://open-meteo.com/en/docs/geocoding-api))
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
