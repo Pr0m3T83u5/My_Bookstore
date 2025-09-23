@@ -1,10 +1,171 @@
 <%- include('partials/header') %>
 
-    <!-- Function for cards-->
-    <!----------------------->
+<!--Function for cloud SVGs-->
+<section id="SVG_Function">
+<% function cloudCoverSVG(cloudCover, hourTime) { %>
+    <% 
+    const hour = parseInt(hourTime.split(':')[0]); // Extract hour as number (0-23)
+    const isNight = hour < 6 || hour > 20; // Night time: 21:00-05:59, Day time: 06:00-20:59
+    %>
+    
+<% if (cloudCover <= 10) { %>
+        <% if (isNight) { %>
+            <!-- Clear Night (0-10%) - Moon and Stars -->
+            <svg class="cloud-icon clear-night" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Moon -->
+                <circle cx="45" cy="45" r="28" fill="#E6E6FA" stroke="#D8BFD8" stroke-width="1"/>
+                <circle cx="51" cy="39" r="26" fill="#1a1a2e" opacity="0.3"/>
+                <!-- Stars -->
+                <g fill="#FFD700" opacity="1">
+                    <circle cx="20" cy="20" r="2"/>
+                    <circle cx="75" cy="25" r="1.5"/>
+                    <circle cx="85" cy="75" r="2"/>
+                    <circle cx="15" cy="75" r="1.5"/>
+                    <circle cx="75" cy="15" r="1.2"/>
+                    <circle cx="25" cy="80" r="1.8"/>
+                </g>
+                <!-- Twinkling effect -->
+                <g fill="#FFF" opacity="0.9">
+                    <circle cx="20" cy="20" r="1">
+                        <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="75" cy="25" r="0.8">
+                        <animate attributeName="opacity" values="0.7;1;0.7" dur="1.5s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="85" cy="75" r="1">
+                        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+                    </circle>
+                </g>
+            </svg>
+        <% } else { %>
+            <!-- Clear Day (0-10%) - Sun -->
+            <svg class="cloud-icon clear-sky" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="25" fill="#FFD700" stroke="#FFC107" stroke-width="2"/>
+                <g stroke="#FFD700" stroke-width="3" stroke-linecap="round">
+                    <line x1="50" y1="15" x2="50" y2="5"/>
+                    <line x1="50" y1="95" x2="50" y2="85"/>
+                    <line x1="15" y1="50" x2="5" y2="50"/>
+                    <line x1="95" y1="50" x2="85" y2="50"/>
+                    <line x1="25.86" y1="25.86" x2="18.79" y2="18.79"/>
+                    <line x1="81.21" y1="81.21" x2="74.14" y2="74.14"/>
+                    <line x1="74.14" y1="25.86" x2="81.21" y2="18.79"/>
+                    <line x1="18.79" y1="81.21" x2="25.86" y2="74.14"/>
+                </g>
+            </svg>
+        <% } %>
+    <% } else if (cloudCover <= 25) { %>
+        <% if (isNight) { %>
+            <!-- Few Clouds Night (11-25%) - Moon with small cloud -->
+            <svg class="cloud-icon few-clouds-night" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Moon (partially visible) -->
+                <circle cx="30" cy="30" r="20" fill="#E6E6FA" stroke="#D8BFD8" stroke-width="1"/>
+                <circle cx="35" cy="27" r="16" fill="#1a1a2e" opacity="0.3"/>
+                <!-- Stars -->
+                <g fill="#FFD700" opacity="0.6">
+                    <circle cx="75" cy="25" r="1"/>
+                    <circle cx="80" cy="75" r="1.2"/>
+                </g>
+                <!-- Cloud -->
+                <path d="M45 60 Q40 50, 50 50 Q65 45, 75 55 Q85 50, 85 60 Q80 70, 70 65 Q55 70, 45 60 Z" 
+                      fill="#F0F8FF" stroke="#B0C4DE" stroke-width="2" opacity="0.9"/>
+            </svg>
+        <% } else { %>
+            <!-- Few Clouds Day (11-25%) - Sun with small cloud -->
+            <svg class="cloud-icon few-clouds" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="35" cy="35" r="20" fill="#FFD700" stroke="#FFC107" stroke-width="1.5"/>
+                <g stroke="#FFD700" stroke-width="2" stroke-linecap="round">
+                    <line x1="35" y1="15" x2="35" y2="10"/>
+                    <line x1="15" y1="35" x2="10" y2="35"/>
+                    <line x1="50.61" y1="20.61" x2="54.14" y2="17.07"/>
+                    <line x1="20.61" y1="50.61" x2="17.07" y2="54.14"/>
+                </g>
+                <path d="M45 55 Q40 45, 50 45 Q65 40, 75 50 Q85 45, 85 55 Q80 65, 70 60 Q55 65, 45 55 Z"
+                      fill="white" stroke="#E3F2FD" stroke-width="1" opacity="0.9"/>
+            </svg>
+        <% } %>
+    <% } else if (cloudCover <= 50) { %>
+        <% if (isNight) { %>
+            <!-- Scattered Clouds Night (26-50%) - Moon barely visible -->
+            <svg class="cloud-icon scattered-clouds-night" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Dim moon behind clouds -->
+                <circle cx="25" cy="25" r="12" fill="#E6E6FA" opacity="0.4"/>
+                <!-- Stars (fewer, dimmer) -->
+                <circle cx="80" cy="20" r="0.8" fill="#FFD700" opacity="0.4"/>
+                <circle cx="85" cy="80" r="1" fill="#FFD700" opacity="0.5"/>
+                <!-- Multiple clouds -->
+                <path d="M25 65 Q20 55, 30 55 Q45 50, 55 60 Q65 55, 65 65 Q60 75, 50 70 Q35 75, 25 65 Z" 
+                      fill="#F0F8FF" stroke="#9CB4D8" stroke-width="1"/>
+                <path d="M50 45 Q45 35, 55 35 Q70 30, 80 40 Q90 35, 90 45 Q85 55, 75 50 Q60 55, 50 45 Z" 
+                      fill="#F8F8FF" stroke="#B0C4DE" stroke-width="1" opacity="0.9"/>
+            </svg>
+        <% } else { %>
+            <!-- Scattered Clouds Day (26-50%) - Sun partially visible -->
+            <svg class="cloud-icon scattered-clouds" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="30" cy="30" r="10" fill="#FFD700" opacity="0.7"/>
+                <path d="M25 60 Q20 50, 30 50 Q45 45, 55 55 Q65 50, 65 60 Q60 70, 50 65 Q35 70, 25 60 Z"
+                      fill="white" stroke="#B0BEC5" stroke-width="1"/>
+                <path d="M50 45 Q45 35, 55 35 Q70 30, 80 40 Q90 35, 90 45 Q85 55, 75 50 Q60 55, 50 45 Z"
+                      fill="#F5F5F5" stroke="#90A4AE" stroke-width="1" opacity="0.8"/>
+            </svg>
+        <% } %>
+    <% } else if (cloudCover <= 75) { %>
+        <% if (isNight) { %>
+            <!-- Broken Clouds Night (51-75%) - Dark clouds, no celestial bodies visible -->
+            <svg class="cloud-icon broken-clouds-night" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Dense dark clouds -->
+                <path d="M15 70 Q10 60, 20 60 Q35 55, 45 65 Q55 60, 55 70 Q50 80, 40 75 Q25 80, 15 70 Z" 
+                      fill="#D3D3D3" stroke="#696969" stroke-width="1"/>
+                <path d="M35 50 Q30 40, 40 40 Q55 35, 65 45 Q75 40, 75 50 Q70 60, 60 55 Q45 60, 35 50 Z" 
+                      fill="#E0E0E0" stroke="#808080" stroke-width="1"/>
+                <path d="M60 70 Q55 60, 65 60 Q80 55, 90 65 Q95 60, 95 70 Q90 80, 80 75 Q65 80, 60 70 Z" 
+                      fill="#DCDCDC" stroke="#778899" stroke-width="1"/>
+            </svg>
+        <% } else { %>
+            <!-- Broken Clouds Day (51-75%) - No sun visible -->
+            <svg class="cloud-icon broken-clouds" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 65 Q10 55, 20 55 Q35 50, 45 60 Q55 55, 55 65 Q50 75, 40 70 Q25 75, 15 65 Z"
+                      fill="#E0E0E0" stroke="#78909C" stroke-width="1"/>
+                <path d="M35 45 Q30 35, 40 35 Q55 30, 65 40 Q75 35, 75 45 Q70 55, 60 50 Q45 55, 35 45 Z"
+                      fill="#EEEEEE" stroke="#90A4AE" stroke-width="1"/>
+                <path d="M60 65 Q55 55, 65 55 Q80 50, 90 60 Q95 55, 95 65 Q90 75, 80 70 Q65 75, 60 65 Z"
+                      fill="#F5F5F5" stroke="#B0BEC5" stroke-width="1"/>
+            </svg>
+        <% } %>
+    <% } else { %>
+        <% if (isNight) { %>
+            <!-- Overcast Night (76-100%) - Very dark, heavy clouds -->
+            <svg class="cloud-icon overcast-night" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Very dark, heavy clouds -->
+                <path d="M10 75 Q5 65, 15 65 Q30 60, 40 70 Q50 65, 50 75 Q45 85, 35 80 Q20 85, 10 75 Z" 
+                      fill="#A9A9A9" stroke="#2F4F4F" stroke-width="1"/>
+                <path d="M25 55 Q20 45, 30 45 Q45 40, 55 50 Q65 45, 65 55 Q60 65, 50 60 Q35 65, 25 55 Z" 
+                      fill="#C0C0C0" stroke="#36454F" stroke-width="1"/>
+                <path d="M50 75 Q45 65, 55 65 Q70 60, 80 70 Q90 65, 90 75 Q85 85, 75 80 Q60 85, 50 75 Z" 
+                      fill="#B8B8B8" stroke="#2F4F4F" stroke-width="1"/>
+                <path d="M35 35 Q30 25, 40 25 Q55 20, 65 30 Q75 25, 75 35 Q70 45, 60 40 Q45 45, 35 35 Z" 
+                      fill="#D0D0D0" stroke="#4682B4" stroke-width="1"/>
+            </svg>
+        <% } else { %>
+            <!-- Overcast Day (76-100%) - Heavy clouds, no sun -->
+            <svg class="cloud-icon overcast" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 70 Q5 60, 15 60 Q30 55, 40 65 Q50 60, 50 70 Q45 80, 35 75 Q20 80, 10 70 Z"
+                      fill="#BDBDBD" stroke="#546E7A" stroke-width="1"/>
+                <path d="M25 50 Q20 40, 30 40 Q45 35, 55 45 Q65 40, 65 50 Q60 60, 50 55 Q35 60, 25 50 Z"
+                      fill="#D0D0D0" stroke="#607D8B" stroke-width="1"/>
+                <path d="M50 70 Q45 60, 55 60 Q70 55, 80 65 Q90 60, 90 70 Q85 80, 75 75 Q60 80, 50 70 Z"
+                      fill="#C0C0C0" stroke="#5D4037" stroke-width="1"/>
+                <path d="M35 30 Q30 20, 40 20 Q55 15, 65 25 Q75 20, 75 30 Q70 40, 60 35 Q45 40, 35 30 Z"
+                      fill="#E0E0E0" stroke="#78909C" stroke-width="1"/>
+            </svg>
+        <% } %>
+    <% } %>
+<% } %>
+</section>
+
 
     <main>
         <div id="location" class="">
+            <h1>Weather App</h1>
             <!-- Search form -->
             <form action="/getCity" method="POST">
                 <input class="" type="text" id="cityName" name="cityName" placeholder="Enter city name...">
@@ -30,9 +191,10 @@
                 <div id="hourly-forecast-container" class="">
                     <% for(let i=0; i<N; i++){ %>
                         <div class="hourly-element">
-                            <div class="Hour hourly-element"><%= hour_temp_precip[i][0] %></div>
-                            <div class="temperature_2m hourly-element"><%= hour_temp_precip[i][1][0] %></div>
-                            <div class="precipitation hourly-element"><%= hour_temp_precip[i][1][1] %></div>
+                            <div class="Hour hourly-element"><%= hour_obj[i][0] %></div>
+                            <div class="cloud_cover hourly-element"><%- cloudCoverSVG(hour_obj[i][1][2], hour_obj[i][0]) %></div> 
+                            <div class="temperature_2m hourly-element"><%= hour_obj[i][1][0] %>°C</div>
+                            <div class="precipitation hourly-element"><%= hour_obj[i][1][1] %> mm</div>
                         </div>
                     <% } %>
                 

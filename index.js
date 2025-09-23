@@ -100,12 +100,43 @@ function valuesAtIndex(array, indexArray){
  * @param {Array<any>} arr2 - The second array.
  * @returns {Array<Array<any>>} A 2 dimensional array with paired index values 
  */
-function toArray(arr1, arr2){
+function toPairedArray(arr1, arr2){
     let mainArr = [];
     for(let i=0; i<arr1.length; i++){
         mainArr.push([arr1[i],arr2[i]]);
     }
     return mainArr;
+}
+
+/**
+ * Combines multiple arrays into a two-dimensional array, 
+ * where each sub-array contains elements from each input array at the same index.
+ * 
+ * @param {...Array<any>} arrays - Two or more arrays of equal length to combine.
+ * @returns {Array<Array<any>>} A two-dimensional array with each sub-array containing elements from the input arrays at the same index.
+ */
+function toArray(...arrays) {
+    // Check if any arrays were passed
+    if (arrays.length === 0) {
+        return [];
+    }
+    // Get the length from the first array (assuming all arrays have same length)
+    const length = arrays[0].length;
+    
+    // Create the result array
+    const result = [];
+    
+    // Loop through each index
+    for (let i = 0; i < length; i++) {
+        // Create a sub-array for this index
+        const row = [];
+        // Add the corresponding element from each array
+        for (let j = 0; j < arrays.length; j++) {
+            row.push(arrays[j][i]);
+        }
+        result.push(row);
+    }
+    return result;
 }
 
 /**
@@ -132,15 +163,15 @@ app.get('/', (req, res) => {
 
 //home route
 app.get('/home', async (req, res) => {
-    const number_of_next_hours = 8;
+    const number_of_next_hours = 14;
     try{
         let lat = req.query.lat || 52.52; // Default to Berlin's latitude
         let lon = req.query.lon || 13.405; // Default to Berlin's longitude
         let cityStateCountry = req.query.city || "Berlin_Germany_Berlin"; // Default to Berlin
 
         // Fetch current weather and hourly forecast data from Open-Meteo API
-        let weatherCurrent = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation`);
-        let weatherHourly = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,precipitation`);
+        let weatherCurrent = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation,cloud_cover`);
+        let weatherHourly = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,precipitation,cloud_cover,is_day`);
         
         // Get the next N indices
         var next_N_HourIndices=next_N_HoursIndices(
@@ -154,15 +185,17 @@ app.get('/home', async (req, res) => {
         //value arrays
         let hourlyTemperature = valuesAtIndex(weatherHourly.data["hourly"]["temperature_2m"],next_N_HourIndices);
         let hourlyPrecipitation = valuesAtIndex(weatherHourly.data["hourly"]["precipitation"],next_N_HourIndices);
+        let hourlyCloudCover = valuesAtIndex(weatherHourly.data["hourly"]["cloud_cover"],next_N_HourIndices);
+
         //Object 
-        let hour_TempPrecip_Obj = toArray(hourlyTime, toArray(hourlyTemperature,hourlyPrecipitation));
+        let hour_Obj = toPairedArray(hourlyTime, toArray(hourlyTemperature,hourlyPrecipitation,hourlyCloudCover));
 
         // Render the home.ejs template and pass the weather
         res.render('home.ejs', {
             N: number_of_next_hours,
             cityCountryState: cityStateCountry,
             currentWeather: weatherCurrent.data.current,
-            hour_temp_precip: hour_TempPrecip_Obj,
+            hour_obj: hour_Obj,
         });
     } catch (error) {
         console.error('Error rendering home Page:', error);
@@ -174,7 +207,7 @@ app.get('/home', async (req, res) => {
 
 // POST to get city coordinates from the API
 app.post('/getCity', async (req, res) => {
-    let cityName = req.body.cityName; //city name from the form on the home page
+    let cityName = req.body.cityName || "Berlin"; //city name from the form on the home page
     try{
         const response = await axios.get(`https://geocoding-api.open-meteo.com/v1/search?name=${cityName.toUpperCase()}&count=10&language=en&format=json`);
         

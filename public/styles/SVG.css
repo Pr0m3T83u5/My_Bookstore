@@ -1,0 +1,151 @@
+/* Cloud Cover SVG Styling - Updated for Day/Night */
+
+.cloud_cover {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 5px 0 !important;
+    min-width: auto !important;
+    transform: none !important;
+}
+
+.cloud-icon {
+    width: 35px;
+    height: 35px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.cloud-icon:hover {
+    transform: scale(1.1);
+}
+
+/* DAY TIME STYLES */
+.clear-sky {
+    filter: drop-shadow(0 2px 4px rgba(255, 193, 7, 0.3));
+    animation: sunRotate 10s linear infinite;
+}
+
+.few-clouds {
+    filter: drop-shadow(0 2px 4px rgba(52, 144, 220, 0.2));
+}
+
+.scattered-clouds {
+    filter: drop-shadow(0 2px 4px rgba(108, 117, 125, 0.3));
+    animation: cloudFloat 6s ease-in-out infinite;
+}
+
+.broken-clouds {
+    filter: drop-shadow(0 2px 4px rgba(73, 80, 87, 0.4));
+    animation: cloudFloat 8s ease-in-out infinite reverse;
+}
+
+.overcast {
+    filter: drop-shadow(0 2px 4px rgba(52, 58, 64, 0.5));
+}
+
+/* NIGHT TIME STYLES */
+.clear-night {
+    filter: drop-shadow(0 2px 6px rgba(230, 230, 250, 0.4));
+    animation: moonGlow 4s ease-in-out infinite alternate;
+}
+
+.few-clouds-night {
+    filter: drop-shadow(0 2px 4px rgba(176, 196, 222, 0.3));
+    animation: nightCloudFloat 7s ease-in-out infinite;
+}
+
+.scattered-clouds-night {
+    filter: drop-shadow(0 2px 4px rgba(105, 105, 105, 0.4));
+    animation: nightCloudFloat 8s ease-in-out infinite reverse;
+}
+
+.broken-clouds-night {
+    filter: drop-shadow(0 2px 4px rgba(47, 79, 79, 0.5));
+    animation: nightCloudDrift 9s ease-in-out infinite;
+}
+
+.overcast-night {
+    filter: drop-shadow(0 2px 6px rgba(47, 79, 79, 0.6));
+    animation: heavyCloudMove 10s ease-in-out infinite;
+}
+
+/* ANIMATIONS */
+@keyframes sunRotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes cloudFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes moonGlow {
+    0% {
+        filter: drop-shadow(0 2px 6px rgba(230, 230, 250, 0.4));
+    }
+    100% {
+        filter: drop-shadow(0 2px 8px rgba(230, 230, 250, 0.7));
+    }
+}
+
+@keyframes nightCloudFloat {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px);
+    }
+    33% {
+        transform: translateY(-2px) translateX(1px);
+    }
+    66% {
+        transform: translateY(-1px) translateX(-1px);
+    }
+}
+
+@keyframes nightCloudDrift {
+    0%, 100% {
+        transform: translateX(0px);
+    }
+    50% {
+        transform: translateX(2px);
+    }
+}
+
+@keyframes heavyCloudMove {
+    0%, 100% {
+        transform: translateX(0px) translateY(0px);
+    }
+    25% {
+        transform: translateX(1px) translateY(-1px);
+    }
+    75% {
+        transform: translateX(-1px) translateY(1px);
+    }
+}
+
+/* Responsive adjustments for cloud icons */
+@media (max-width: 768px) {
+    .cloud-icon {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cloud-icon {
+        width: 28px;
+        height: 28px;
+    }
+}
